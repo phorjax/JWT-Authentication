@@ -14,6 +14,7 @@ from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
 
 
+#to commit
 #from models import Person
 
 ENV = os.getenv("FLASK_ENV")
