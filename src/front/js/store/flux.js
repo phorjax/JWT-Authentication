@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
+      token: null,
       message: null,
       demo: [
         {
@@ -20,6 +21,17 @@ const getState = ({ getStore, getActions, setStore }) => {
       exampleFunction: () => {
         getActions().changeColor(0, "green");
       },
+      syncTokenfromSessionStorage: () => {
+        const token = sessionStorage.getItem("token");
+        if (token && token !== undefined && token !== "")
+          setStore({ token: token });
+      },
+
+      logout: () => {
+        sessionStorage.removeItem("token");
+        console.log("loging out");
+        setStore({ token: null });
+      },
 
       login: async (email, password) => {
         const opts = {
@@ -35,7 +47,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
         try {
           const response = await fetch(
-            "https://3001-rickrodrigu-jwtpractice-7002lkq0dxx.ws-us90.gitpod.io/api/token",
+            "https://3001-phorjax-jwtauthenticati-mf5sh9fysg8.ws-us92.gitpod.io/api/token",
             opts
           );
           if (response.status !== 200) {
@@ -43,25 +55,34 @@ const getState = ({ getStore, getActions, setStore }) => {
             return false;
           }
           const data = await response.json();
+          console.log("backend token: " + data);
           sessionStorage.setItem("token", data.access_token);
+          setStore({ token: data.access_token });
           return true;
         } catch (error) {
           console.error("Error! Description: " + error);
         }
       },
 
-      getMessage: async () => {
-        try {
-          // fetching data from the backend
-          const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
-          const data = await resp.json();
-          setStore({ message: data.message });
-          // don't forget to return something, that is how the async resolves
-          return data;
-        } catch (error) {
-          console.log("Error loading message from backend", error);
-        }
+      getMessage: () => {
+        const store = getStore();
+        const opts = {
+          headers: {
+            Authorization: "Bearer" + store.token,
+          },
+        };
+        // fetching data from the backend
+        fetch(
+          "https://3001-phorjax-jwtauthenticati-mf5sh9fysg8.ws-us92.gitpod.io//api/hello",
+          opts
+        )
+          .then((resp) => resp.json())
+          .then((data) => setStore({ message: data.message }))
+          .catch((error) => console.log(error));
+
+        // don't forget to return something, that is how the async resolves
       },
+
       changeColor: (index, color) => {
         //get the store
         const store = getStore();
