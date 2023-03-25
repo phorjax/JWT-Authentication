@@ -24,6 +24,9 @@ export const Navbar = () => {
               log out
             </button>
           )}
+          <Link to="/signup">
+            <button className="btn btn-primary">Sign up</button>
+          </Link>
         </div>
       </div>
     </nav>

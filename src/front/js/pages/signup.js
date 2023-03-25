@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
-export const Login = () => {
+export const SignUp = () => {
   const { store, actions } = useContext(Context);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,22 +14,22 @@ export const Login = () => {
   console.log("Your token: " + token);
 
   const handleClick = () => {
-    actions.login(email, password);
+    actions.signup(email, password);
   };
   useEffect(() => {
     if (store.token && store.token != "" && store.token != undefined)
-      history("/");
+      history("/login");
   });
 
   return (
     <div className="text-center mt-5">
-      <h1>Login</h1>
+      <h1>Sign up!</h1>
       {store.token && store.token != "" && store.token != undefined ? (
         "You are now logged in with token " + token
       ) : (
         <div>
           <input
-            type="text"
+            type="email"
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -40,7 +40,7 @@ export const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={handleClick}>Login</button>
+          <button onClick={handleClick}>submit</button>
         </div>
       )}
     </div>
