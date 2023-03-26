@@ -38,8 +38,7 @@ def generate_token():
 @jwt_required() 
 def get_hello():
     email = get_jwt_identity()
-    dictionary = {"message": "hello " + email}
+    dictionary = {"message": email}
     return jsonify(dictionary)
     
     
-   

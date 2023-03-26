@@ -29,7 +29,7 @@ export const SignUp = () => {
       ) : (
         <div>
           <input
-            type="email"
+            type="text"
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
